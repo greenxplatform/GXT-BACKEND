@@ -1,0 +1,32 @@
+# Gradle / IDE compile output
+.gradle/
+**/build/
+**/bin/
+/out/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.classpath
+*.project
+.settings/
+.classpath
+.project
+.factorypath
+
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets — never commit
+.env
+!.env.example
+
+# Logs
+*.log
+
+# Local override files (keep application-local.yml in git)
+*.secrets.yml
+*.secrets.properties
