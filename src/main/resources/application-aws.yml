@@ -1,0 +1,41 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${GXT_DB_HOST}:${GXT_DB_PORT:5432}/${GXT_DB_NAME:gxt-sandbox}?sslmode=require
+    username: ${GXT_DB_USER:postgres}
+    password: ${GXT_DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+spring.ai:
+  anthropic:
+    api-key: ${ANTHROPIC_API_KEY:}
+    chat:
+      options:
+        model: claude-3-5-sonnet-20241022
+
+gxt:
+  ai:
+    provider: ${GXT_AI_PROVIDER:anthropic}
+  jwt:
+    secret: ${GXT_JWT_SECRET}
+  otp:
+    delivery: smtp
+  mail:
+    from: ${GXT_MAIL_FROM:connect.gxt@gmail.com}
+    from-name: gxt-app
+
+logging:
+  level:
+    com.gxt: INFO
+    root: WARN
+
+management:
+  endpoint:
+    health:
+      show-details: never

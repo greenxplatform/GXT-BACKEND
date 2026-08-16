@@ -1,0 +1,67 @@
+spring:
+  application:
+    name: gxt-backend
+  profiles:
+    active: local
+  config:
+    import: optional:file:.env[.properties]
+  ai:
+    model:
+      chat: none
+      embedding: none
+      image: none
+      moderation: none
+      audio:
+        speech: none
+        transcription: none
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${GXT_MAIL_USERNAME:}
+    password: ${GXT_MAIL_PASSWORD:}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+
+server:
+  port: 8080
+
+gxt:
+  ai:
+    provider: anthropic
+  backtest:
+    thread-pool-size: 4
+    max-concurrent-jobs: 8
+  auth:
+    stub-user-id: demo-user
+  jwt:
+    secret: ${GXT_JWT_SECRET:}
+    expiry-seconds: 3600
+  otp:
+    delivery: ${GXT_OTP_DELIVERY:log}
+  mail:
+    from: ${GXT_MAIL_FROM:connect.gxt@gmail.com}
+    from-name: gxt-app
+  cors:
+    allowed-origin-patterns: http://localhost:5173,http://localhost:8181,http://127.0.0.1:*,https://gxtos.com
+  oauth:
+    google:
+      client-id: ${GXT_GOOGLE_CLIENT_ID:}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when_authorized
+  health:
+    mail:
+      enabled: false
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html

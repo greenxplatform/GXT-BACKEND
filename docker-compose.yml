@@ -1,0 +1,44 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: gxt-postgres
+    environment:
+      POSTGRES_DB: gxt
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - gxt_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d gxt"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  gxt-app:
+    build: .
+    container_name: gxt-app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/gxt
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      GXT_AI_PROVIDER: ${GXT_AI_PROVIDER:-anthropic}
+      GXT_MAIL_USERNAME: ${GXT_MAIL_USERNAME:-}
+      GXT_MAIL_PASSWORD: ${GXT_MAIL_PASSWORD:-}
+      GXT_MAIL_FROM: ${GXT_MAIL_FROM:-connect.gxt@gmail.com}
+      GXT_OTP_DELIVERY: ${GXT_OTP_DELIVERY:-smtp}
+      GXT_JWT_SECRET: ${GXT_JWT_SECRET:-}
+    env_file:
+      - .env
+
+volumes:
+  gxt_pg_data:
